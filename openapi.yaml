@@ -1,0 +1,337 @@
+openapi: 3.0.1
+info:
+  title: 古生物鉴定平台接口文档
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+servers:
+  - url: 'http://url/api'
+paths:
+  /login/account:
+  
+    post:
+      tags:
+        - login
+      summary: 账户登录
+      requestBody:
+        description: 用户名和密码
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                password:
+                  type: string
+                type:
+                  type: string
+                  example: account
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [ok, error]
+                  currentAuthority:
+                    type: string
+                    example: admin
+          description: >
+            status:
+             * `ok` - 登录成功
+             * `error` - 登录失败
+  /user/getCurrentUser:
+    post:
+      tags:
+        - user
+      summary: 获取当前登录用户
+      requestBody: 
+        content: {}
+        required: false
+      responses:
+        '200':
+          description: 当前登录用户信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /user/getUsers:
+    post:
+      tags:
+        - user
+      summary: 获取用户
+      parameters:
+        - $ref: '#/components/parameters/sorter'
+        - $ref: '#/components/parameters/role'
+        - $ref: '#/components/parameters/fullName'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/currentPage'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserList'
+  /user/add:
+    post:
+      tags:
+        - user
+      summary: 增加用户
+      parameters:
+        - $ref: '#/components/parameters/sorter'
+        - $ref: '#/components/parameters/role'
+        - $ref: '#/components/parameters/fullName'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/currentPage'
+      requestBody:
+        description: 用户信息
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/UserList'
+  /user/remove:
+    post:
+      tags:
+        - user
+      summary: 删除用户
+      parameters:
+        - $ref: '#/components/parameters/sorter'
+        - $ref: '#/components/parameters/role'
+        - $ref: '#/components/parameters/fullName'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/currentPage'
+      requestBody:
+        description: 用户信息
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+            $ref: '#/components/responses/UserList'
+  /user/update:
+    post:
+      tags:
+        - user
+      summary: 修改用户
+      parameters:
+        - $ref: '#/components/parameters/sorter'
+        - $ref: '#/components/parameters/role'
+        - $ref: '#/components/parameters/fullName'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/currentPage'
+      requestBody:
+        description: 用户信息
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+            $ref: '#/components/responses/UserList'
+  /iden/getIdens:
+    post:
+      tags:
+        - identification
+      summary: 获取鉴定申请
+      parameters:
+        - $ref: '#/components/parameters/sorter'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/currentPage'
+      responses:
+        '200':
+          $ref: '#/components/responses/IdenList'
+  /iden/add:
+    post:
+      tags:
+        - identification
+      summary: 增加鉴定申请 
+      parameters:
+        - $ref: '#/components/parameters/sorter'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/currentPage'
+      requestBody:
+        description: 鉴定申请  
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Iden'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/IdenList'
+  /iden/remove:
+    post:
+      tags:
+        - identification 
+      summary: 删除鉴定申请
+      parameters:
+        - $ref: '#/components/parameters/sorter'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/currentPage'
+      requestBody:
+        description: 鉴定申请
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Iden'
+        required: true
+      responses:
+        '200':
+            $ref: '#/components/responses/IdenList'
+  /iden/update:
+    post:
+      tags:
+        - identification 
+      summary: 修改鉴定申请
+      parameters:
+        - $ref: '#/components/parameters/sorter'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/currentPage'
+      requestBody:
+        description: 鉴定申请 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Iden'
+        required: true
+      responses:
+        '200':
+            $ref: '#/components/responses/IdenList'
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        current:
+          type: integer
+          format: int32
+    Iden:
+      type: object
+      properties:
+        待定:
+          type: integer
+          format: int64
+    User:
+      required:
+        - id
+        - username
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        phone:
+          type: string
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+      xml:
+        name: User
+  parameters:
+    sorter:
+      name: sorter
+      in: query
+      description: 排序的列，使用“_”分隔
+      required: false
+      schema:
+        type: string
+    role:
+      name: role
+      in: query
+      description: 用户角色
+      required: false
+      schema:
+        type: string
+    fullName:
+      name: fullName
+      in: query
+      description: 用户名
+      required: false
+      schema:
+        type: string
+    pageSize:    
+      name: pageSize
+      in: query
+      description: 分页大小
+      required: false
+      schema:
+        type: string
+    currentPage:    
+      name: currentPage
+      in: query
+      description: 当前页
+      required: false
+      schema:
+        type: string
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
+          scopes:
+            'write:pets': modify pets in your account
+            'read:pets': read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+  responses:
+    UserList:
+      description: 用户列表和分页信息
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              pagination:
+                $ref: '#/components/schemas/Pagination'
+    IdenList:
+      description: 申请列表和分页信息
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              list:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Iden'
+              pagination:
+                $ref: '#/components/schemas/Pagination'
